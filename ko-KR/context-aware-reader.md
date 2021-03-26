@@ -136,7 +136,7 @@ func NewCancellableReader(rdr io.Reader) io.Reader {
 }
 ```
 
-If you try and run it
+당신이 시도하고 실행한다면,
 
 ```
 === RUN   TestCancelReaders
@@ -146,7 +146,7 @@ panic: runtime error: invalid memory address or nil pointer dereference [recover
 [signal SIGSEGV: segmentation violation code=0x1 addr=0x0 pc=0x10f8fb5]
 ```
 
-As expected
+예상대로 나올것이다. 
 
 ## 테스트를 통과하는 최소한의 코드 작성하기 
 

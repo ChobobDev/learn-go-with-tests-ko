@@ -1,10 +1,10 @@
 # 상태 자각 리더
 
-**[You can find all the code here](https://github.com/quii/learn-go-with-tests/tree/main/q-and-a/context-aware-reader)**
+**[이 챕터의 모든 코드는 여기에서 확인할 수 있다.](https://github.com/MiryangJung/learn-go-with-tests-ko/tree/master/q-and-a/context-aware-reader)**
 
 This chapter demonstrates how to test-drive a context aware `io.Reader` as written by Mat Ryer and David Hernandez in [The Pace Dev Blog](https://pace.dev/blog/2020/02/03/context-aware-ioreader-for-golang-by-mat-ryer).
 
-## Context aware reader?
+## 상태 자각 리더란?
 
 First of all, a quick primer on `io.Reader`.
 
@@ -18,7 +18,7 @@ type Reader interface {
 
 By using `io.Reader` you can gain a lot of re-use from the standard library, it's a very commonly used abstraction (along with its counterpart `io.Writer`)
 
-### Context aware?
+### 상태 자각이란?
 
 [In a previous chapter](context.md) we discussed how we can use `context` to provide cancellation. This is especially useful if you're performing tasks which may be computationally expensive and you want to be able to stop them.
 
@@ -92,7 +92,7 @@ From this we can imagine sending some kind of cancel signal before the second re
 
 Now we've seen how it works we'll TDD the rest of the functionality.
 
-## Write the test first
+## 테스트부터 작성하기 
 
 We want to be able to compose an `io.Reader` with a `context.Context`.
 
@@ -122,12 +122,11 @@ t.Run("behaves like a normal reader", func(t *testing.T) {
 })
 ```
 
-## Try to run the test
-
+## 테스트 실행해보기
 ```
 ./cancel_readers_test.go:12:10: undefined: NewCancellableReader
 ```
-## Write the minimal amount of code for the test to run and check the failing test output
+## 컴파일이 되는 최소한의 코드를 작성하고, 테스트 실패 출력을 확인하기
 
 We'll need to define this function and it should return an `io.Reader`
 
@@ -149,7 +148,7 @@ panic: runtime error: invalid memory address or nil pointer dereference [recover
 
 As expected
 
-## Write enough code to make it pass
+## 테스트를 통과하는 최소한의 코드 작성하기 
 
 For now, we'll just return the `io.Reader` we pass in
 
@@ -163,7 +162,7 @@ The test should now pass.
 
 I know, I know, this seems silly and pedantic but before charging in to the fancy work it is important that we have _some_ verification that we haven't broken the "normal" behaviour of an `io.Reader` and this test will give us confidence as we move forward.
 
-## Write the test first
+## 테스트부터 작성하기 
 
 Next we need to try and cancel.
 
@@ -199,7 +198,7 @@ We can more or less copy the first test but now we're:
 - For our code to work we'll need to pass `ctx` to our function
 - We then assert that post-`cancel` nothing was read
 
-## Try to run the test
+## 테스트 실행해보기
 
 ```
 ./cancel_readers_test.go:33:30: too many arguments in call to NewCancellableReader
@@ -207,7 +206,7 @@ We can more or less copy the first test but now we're:
 	want (io.Reader)
 ```
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## 컴파일이 되는 최소한의 코드를 작성하고, 테스트 실패 출력을 확인하기
 
 The compiler is telling us what to do; update our signature to accept a context
 
@@ -230,7 +229,7 @@ You should now see a very clear failing test output
         cancel_readers_test.go:52: expected 0 bytes to be read after cancellation but 3 were read
 ```
 
-## Write enough code to make it pass
+## 테스트를 통과하는 최소한의 코드 작성하기 
 
 At this point, it's copy and paste from the original post by Mat and David but we'll still take it slowly and iteratively.
 
@@ -290,7 +289,7 @@ func (r readerCtx) Read(p []byte) (n int, err error) {
 
 All tests should now pass. You'll notice how we return the error from the `context.Context`. This allows callers of the code to inspect the various reasons cancellation has occurred and this is covered more in the original post.
 
-## Wrapping up
+## 정리
 
 - Small interfaces are good and are easily composed
 - When you're trying to augment one thing (e.g `io.Reader`) with another you usually want to reach for the [delegation pattern](https://en.wikipedia.org/wiki/Delegation_pattern)

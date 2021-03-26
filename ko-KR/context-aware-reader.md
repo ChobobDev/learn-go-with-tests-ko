@@ -1,4 +1,4 @@
-# 상태 자 리더
+# 상태 자각 리더
 
 **[You can find all the code here](https://github.com/quii/learn-go-with-tests/tree/main/q-and-a/context-aware-reader)**
 
